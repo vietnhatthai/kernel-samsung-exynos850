@@ -682,7 +682,9 @@ static int madera_amp_late_probe(struct snd_soc_card *card, int dai)
 
 static int exynos3830_late_probe(struct snd_soc_card *card)
 {
-	struct madera_drvdata *drvdata = card->drvdata;
+
+    return 0;
+	struct madera_drvdata *drvdata = card->drvdata; //crash!!
 	struct snd_soc_pcm_runtime *rtd;
 	struct snd_soc_dai *aif_dai;
 	struct snd_soc_dapm_context *dapm;
