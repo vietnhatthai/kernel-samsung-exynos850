@@ -312,7 +312,7 @@ static int __init read_f_mode(char *str)
 __setup("f_mode=", read_f_mode);
 #endif
 
-inline void battery_wakeup_source_init(struct device *dev, struct wakeup_source **ws, const char *name)
+void battery_wakeup_source_init(struct device *dev, struct wakeup_source **ws, const char *name)
 {
 #if !defined(CONFIG_SUPPORT_WAKEUP_REGISTER) && LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0)
 	// 4.19 R
@@ -6721,13 +6721,14 @@ static int make_pd_list(struct sec_battery_info *battery)
 			pd_list_select].pdo_index].max_current / 1000;
 		battery->pd_max_charge_power = battery->max_charge_power;
 	}
-
+#if defined(CONFIG_BATTERY_CISD)
 	if (battery->cable_type == SEC_BATTERY_CABLE_NONE) {
 		if (battery->pd_max_charge_power > 12000)
 			battery->cisd.cable_data[CISD_CABLE_PD_HIGH]++;
 		else
 			battery->cisd.cable_data[CISD_CABLE_PD]++;
 	}
+#endif
 
 	if (battery->pdic_info.sink_status.selected_pdo_num == battery->pd_list.pd_info[pd_list_select].pdo_index) {
 		battery->pdic_ps_rdy = true;

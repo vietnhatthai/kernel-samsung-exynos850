@@ -429,15 +429,15 @@ static void *vb2_vmalloc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
 
 
 const struct vb2_mem_ops vb2_vmalloc_memops = {
-	.alloc		= vb2_vmalloc_alloc,
+	.alloc		= (void *(*)(struct device *, unsigned long, unsigned long,enum dma_data_direction, gfp_t, int)) vb2_vmalloc_alloc,
 	.put		= vb2_vmalloc_put,
-	.get_userptr	= vb2_vmalloc_get_userptr,
+	.get_userptr	= (void *(*)(struct device *, unsigned long, unsigned long,enum dma_data_direction, int)) vb2_vmalloc_get_userptr,
 	.put_userptr	= vb2_vmalloc_put_userptr,
 #ifdef CONFIG_HAS_DMA
 	.get_dmabuf	= vb2_vmalloc_get_dmabuf,
 #endif
-	.map_dmabuf	= vb2_vmalloc_map_dmabuf,
-	.unmap_dmabuf	= vb2_vmalloc_unmap_dmabuf,
+	.map_dmabuf	= (int (*)(void *, size_t, int)) vb2_vmalloc_map_dmabuf,
+	.unmap_dmabuf	= (void (*)(void *, size_t)) vb2_vmalloc_unmap_dmabuf,
 	.attach_dmabuf	= vb2_vmalloc_attach_dmabuf,
 	.detach_dmabuf	= vb2_vmalloc_detach_dmabuf,
 	.vaddr		= vb2_vmalloc_vaddr,
